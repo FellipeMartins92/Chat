@@ -12,4 +12,5 @@ class messages_to_user(models.Model):
 
 class messages_to_group(models.Model):
     id_group = models.ManyToManyField(GroupChat)
+    id_sender = models.ManyToManyField(User)
     message = models.CharField(255)
