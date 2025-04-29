@@ -25,7 +25,7 @@ def Excluir_User(request,Id):
 def Send_Friend_Request(request,id_to_friend):
     return HttpResponse(request,'sucesso')
 
-def Accept_Friend_request(request,id_to_friend):
+def Accept_Friend_request(request,id_friend_request):
     return HttpResponse(request,'sucesso')
 
 def Delete_Friend(request,id_to_unfriend):
