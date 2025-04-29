@@ -13,6 +13,11 @@ class User(models.Model):
     @staticmethod
     def Validate_Single_Mail(mail):
         return not User.objects.filter(mail=mail).exists()
+    
+    @staticmethod
+    def Validate_User(mail,password):
+        return User.objects.filter(mail=mail,password=password).exists()
+
 
 class Friends(models.Model):
     STATUS = {

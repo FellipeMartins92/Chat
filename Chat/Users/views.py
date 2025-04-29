@@ -10,7 +10,16 @@ def Cadastro_User(request):
     return render(request,'Users/Cadastro_User.html')
 
 def Login_User(request):
-    return HttpResponse(request,'sucesso')
+    return render(request,'Users/Login_User.html')
+
+def Validate_Login_User(request):
+    if request.method == 'POST':
+        form = forms.Login_User_Form(request.POST)
+        if form.is_valid() and models.User.Validate_User(request.POST.get('mail'),request.POST.get('password')):
+            return HttpResponse('Sucesso')
+        
+    return HttpResponse('Deu Ruim')
+
 
 def Salvar_Novo_User(request):
     if request.method == 'POST':

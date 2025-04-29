@@ -20,4 +20,4 @@ class Login_User_Form(forms.ModelForm):
         widgets = {
             'mail': forms.TextInput(attrs={'class': 'form-control'}),
             'password': forms.TextInput(attrs={'class': 'form-control'}),
-        }        
+        }
