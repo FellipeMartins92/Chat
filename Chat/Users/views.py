@@ -32,10 +32,28 @@ def Salvar_Novo_User(request):
     return redirect('Cadastro') 
 
 def Salvar_User_Editado(request,Id):
-    return HttpResponse(request,'sucesso')
+    user = get_object_or_404(models.User, id=Id)
+
+    if request.method == 'POST':
+        form = forms.Edit_User_Form(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Editado com sucesso!')
+            return HttpResponse('Sucesso') 
+        else:
+            messages.error(request, 'Erro ao Editar. Verifique os dados e tente novamente.')
+            return HttpResponse('Erro') 
+
+    return render(request, 'Colaborador/cadastro_colaborador.html')        
+
 
 def Excluir_User(request,Id):
-    return HttpResponse(request,'sucesso')
+    user = models.User.objects.filter(id=Id).first()
+    if user:
+        user.delete() 
+        return HttpResponse('Deletado')
+    else:
+        return HttpResponse('Erro')
 
 #Friends
 
