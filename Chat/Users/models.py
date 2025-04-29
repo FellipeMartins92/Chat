@@ -10,6 +10,10 @@ class User(models.Model):
     password = models.CharField(max_length=16)
     ativo = models.BooleanField(default=True)
 
+    @staticmethod
+    def Validate_Single_Mail(mail):
+        return not User.objects.filter(mail=mail).exists()
+
 class Friends(models.Model):
     STATUS = {
         ("1", "Pending"),
