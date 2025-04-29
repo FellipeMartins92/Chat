@@ -12,6 +12,10 @@ def Cadastro_User(request):
 def Login_User(request):
     return render(request,'Users/Login_User.html')
 
+def Editar_User(request,Id):
+    user = models.User.objects.get(id=Id)
+    return render(request,'Users/Editar_User.html',{'user':user})
+
 def Validate_Login_User(request):
     if request.method == 'POST':
         form = forms.Login_User_Form(request.POST)
@@ -19,7 +23,6 @@ def Validate_Login_User(request):
             return HttpResponse('Sucesso')
         
     return HttpResponse('Deu Ruim')
-
 
 def Salvar_Novo_User(request):
     if request.method == 'POST':
@@ -45,7 +48,6 @@ def Salvar_User_Editado(request,Id):
             return HttpResponse('Erro') 
 
     return render(request, 'Colaborador/cadastro_colaborador.html')        
-
 
 def Excluir_User(request,Id):
     user = models.User.objects.filter(id=Id).first()
