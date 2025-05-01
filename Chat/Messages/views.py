@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
+from django.db.models import Q
 from Users.models import *
 from .models import *
 
@@ -9,23 +10,40 @@ from .models import *
 
 @custom_login_required
 def Messages(request):
-    users = User.objects.all()
-    messages = [] 
+    users       = User.objects.all()
+    id_receiver = request.GET.get('id_receiver')
+    user_id     = request.session.get('user_id')
+    messages    = []
 
-    if request.method == 'GET' and request.GET.get('id_receiver') is None:
-        name = request.GET.get('name', '')
-        if name:
-            users = users.filter(name__icontains=name)
-    
-    if request.method == 'GET' and request.GET.get('id_receiver') is not None:
-        id_receiver = request.GET.get('id_receiver')
-        try:
-            messages = messages_to_user.objects.filter(id_receiver=id_receiver)  # Retorna todas as mensagens
-        except:
-            messages = [] 
+    if id_receiver:
+        messages = messages_to_user.objects.filter(
+            Q(id_sender=user_id,   id_receiver=id_receiver) |
+            Q(id_sender=id_receiver, id_receiver=user_id)
+        ).order_by('sent')
 
-    return render(request, "Messages.html", {"users": users, "messages": messages})
+    return render(request, "Messages.html", {
+        "users": users,
+        "messages": messages,
+        "id_receiver": id_receiver,
+    })
 
+@custom_login_required
+def Atualizar_Messages(request, id_receiver):
+    user_id = request.session.get('user_id')
+
+    # pega todas as mensagens entre os dois usuários
+    messages = messages_to_user.objects.filter(
+        Q(id_sender=user_id,   id_receiver=id_receiver) |
+        Q(id_sender=id_receiver, id_receiver=user_id)
+    ).order_by('sent')
+
+    data = [{
+        'message':    m.message,
+        'id_sender':  m.id_sender.id,
+        'id_receiver':m.id_receiver.id,
+    } for m in messages]
+
+    return JsonResponse({'messages': data})
 
 #Mensagens
 
