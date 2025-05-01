@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.contrib import messages
-from . import forms, models
+from . import forms
 from Users.models import *
 # Create your views here.
 
@@ -20,7 +20,7 @@ def Logout_User(request):
 
 @custom_login_required
 def Editar_User(request,Id):
-    user = models.User.objects.get(id=Id)
+    user = User.objects.get(id=Id)
     return render(request,'Users/Editar_User.html',{'user':user})
 
 def Validate_Login_User(request):        
@@ -29,10 +29,10 @@ def Validate_Login_User(request):
         password = request.POST.get('password')
 
         try:
-            user = models.User.objects.get(mail=mail, password=password)
+            user = User.objects.get(mail=mail, password=password)
             request.session['user_id'] = user.id
             return redirect('/')  
-        except models.User.DoesNotExist:
+        except User.DoesNotExist:
             return HttpResponse('Credenciais inválidas.')
 
     return render(request, 'Users/Login_User.html')
@@ -40,7 +40,7 @@ def Validate_Login_User(request):
 def Salvar_Novo_User(request):
     if request.method == 'POST':
         form = forms.Cadastro_User_Form(request.POST)
-        if form.is_valid() and models.User.Validate_Single_Mail(request.POST.get('mail')):
+        if form.is_valid() and User.Validate_Single_Mail(request.POST.get('mail')):
             form.save()
             return redirect('/Login')
         else:
@@ -50,7 +50,7 @@ def Salvar_Novo_User(request):
 
 @custom_login_required
 def Salvar_User_Editado(request,Id):
-    user = get_object_or_404(models.User, id=Id)
+    user = get_object_or_404(User, id=Id)
 
     if request.method == 'POST':
         form = forms.Edit_User_Form(request.POST, instance=user)
@@ -66,7 +66,7 @@ def Salvar_User_Editado(request,Id):
 
 @custom_login_required
 def Excluir_User(request,Id):
-    user = models.User.objects.filter(id=Id).first()
+    user = User.objects.filter(id=Id).first()
     if user:
         user.delete() 
         return HttpResponse('Deletado')
@@ -77,7 +77,7 @@ def Excluir_User(request,Id):
     
 @custom_login_required  
 def Add_Friends(request):
-    users = models.User.objects.all()
+    users = User.objects.all()
 
     if request.method =='GET':
         name = request.GET.get('name', '')

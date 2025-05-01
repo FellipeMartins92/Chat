@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-
 from Users.models import custom_login_required
 
 # Create your views here.
