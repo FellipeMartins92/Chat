@@ -1,3 +1,5 @@
+{% load static %}
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container-fluid">
         <a class="navbar-brand" href=" {% url 'Home' %}">ChatApp</a>
@@ -8,7 +10,7 @@
         <div class="dropdown ms-auto">
             <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="navbarUser" data-bs-toggle="dropdown" aria-expanded="false">
                 <span class="fw-semibold">Fellipe</span>
-                <img src="https://img.freepik.com/fotos-gratis/retrato-de-homem-branco-isolado_53876-40306.jpg?semt=ais_hybrid&w=740" alt="User" style="height: 30px;" class="rounded-circle ms-3">
+                <img src="{% static 'images/default.png' %}" alt="User" style="height: 30px;" class="rounded-circle ms-3">
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarUser">
                 <li><a class="dropdown-item" href="#">Perfil</a></li>

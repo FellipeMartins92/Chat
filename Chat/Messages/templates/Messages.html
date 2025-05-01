@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -29,7 +31,7 @@
           <!-- Contato exemplo -->
           <a href="" class="text-white text-decoration-none">
             <div class="d-flex align-items-center bg-primary bg-opacity-75 rounded p-2 mb-3">
-              <img src="https://img.freepik.com/fotos-gratis/retrato-de-homem-branco-isolado_53876-40306.jpg?semt=ais_hybrid&w=740" class="rounded-circle me-3" style="width: 50px; height: 45px;" alt="Avatar">
+              <img src="{% static 'images/default.png' %}" class="rounded-circle me-3" style="width: 50px; height: 45px;" alt="Avatar">
               <span class="fw-semibold">Fellipe</span>
             </div>
           </a>

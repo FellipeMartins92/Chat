@@ -60,7 +60,15 @@ def Excluir_User(request,Id):
 #Friends
     
 def Add_Friends(request):
-    return render(request, 'Friends/Add_Friends.html')            
+    users = models.User.objects.all()
+
+    if request.method =='GET':
+        name = request.GET.get('name', '')
+
+        if name:
+            users = users.filter(name=name)
+
+    return render(request, 'Friends/Add_Friends.html',{"users":users})            
 
 def Send_Friend_Request(request,id_to_friend):
     return HttpResponse(request,'sucesso')
