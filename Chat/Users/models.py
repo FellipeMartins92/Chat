@@ -1,5 +1,5 @@
 from django.db import models
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 
 # Create your models here.
 
@@ -18,7 +18,13 @@ class User(models.Model):
     @staticmethod
     def Validate_User(mail,password):
         return User.objects.filter(mail=mail,password=password).exists()
-
+    
+def custom_login_required(view_func):
+    def wrapper(request, *args, **kwargs):
+        if 'user_id' not in request.session:
+            return redirect('Login')
+        return view_func(request, *args, **kwargs)
+    return wrapper    
 
 class Friends(models.Model):
     STATUS = {
