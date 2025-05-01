@@ -101,7 +101,7 @@ def User_Page(request,Id):
     
 @custom_login_required  
 def Add_Friends(request):
-    users = User.objects.all()
+    users = User.objects.exclude(id=request.session['user_id'])
 
     if request.method =='GET':
         name = request.GET.get('name', '')
