@@ -47,7 +47,7 @@ def Salvar_User_Editado(request,Id):
             messages.error(request, 'Erro ao Editar. Verifique os dados e tente novamente.')
             return HttpResponse('Erro') 
 
-    return render(request, 'Colaborador/cadastro_colaborador.html')        
+    return HttpResponse('Erro')
 
 def Excluir_User(request,Id):
     user = models.User.objects.filter(id=Id).first()
@@ -58,6 +58,9 @@ def Excluir_User(request,Id):
         return HttpResponse('Erro')
 
 #Friends
+    
+def Add_Friends(request):
+    return render(request, 'Friends/Add_Friends.html')            
 
 def Send_Friend_Request(request,id_to_friend):
     return HttpResponse(request,'sucesso')
