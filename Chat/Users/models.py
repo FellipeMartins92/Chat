@@ -8,6 +8,7 @@ from django.db import models
 class User(models.Model):
     name = models.CharField(max_length=100)
     mail = models.CharField(max_length=100)
+    picture = models.ImageField(null=True,blank=True, upload_to="imagens/")
     password = models.CharField(max_length=16)
     ativo = models.BooleanField(default=True)
 

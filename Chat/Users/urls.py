@@ -11,6 +11,7 @@ urlpatterns = [
     path('Logout', views.Logout_User,name='Logout'),
     path('Editar/<int:Id>/', views.Editar_User,name='Editar'),
     path('Salvar_User_Editado/<int:Id>/', views.Salvar_User_Editado,name='Salvar_User_Editado'),
+    path('User_Page/<int:Id>/', views.User_Page,name='User_Page'),
 
     #Friends
 

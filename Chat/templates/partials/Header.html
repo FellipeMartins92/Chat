@@ -9,11 +9,17 @@
 
         <div class="dropdown ms-auto">
             <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="navbarUser" data-bs-toggle="dropdown" aria-expanded="false">
-                <span class="fw-semibold">Fellipe</span>
-                <img src="{% static 'images/default.png' %}" alt="User" style="height: 30px;" class="rounded-circle ms-3">
+                <span class="fw-semibold">{{ request.session.name }}</span>
+                {% if request.session.picture %}
+                    <img src="{{ request.session.picture }}" alt="User" style="height: 30px;" class="rounded-circle ms-3">
+                {% else %}
+                    <img src="{% static 'images/default.png' %}" alt="User" style="height: 30px;" class="rounded-circle ms-3">                
+                {% endif %}
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarUser">
-                <li><a class="dropdown-item" href="#">Perfil</a></li>
+                <li><a class="dropdown-item" href="{% url 'User_Page' request.session.user_id %}">Perfil</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="{% url 'Editar' request.session.user_id %}">Editar Perfil</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="{% url 'Logout' %}">Sair</a></li>
             </ul>
