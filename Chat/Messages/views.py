@@ -1,13 +1,21 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from Users.models import *
 
 # Create your views here.
 
 #Chat
 
 def Messages(request):
-    return render(request,"Messages.html")
+    users = User.objects.all()
 
+    if request.method =='GET':
+        name = request.GET.get('name', '')
+
+        if name:
+            users = users.filter(name=name)
+
+    return render(request,"Messages.html",{"users":users})
 
 
 #Mensagens

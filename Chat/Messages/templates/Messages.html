@@ -21,21 +21,26 @@
           <!-- Formulário de busca -->
           <form method="GET" action="">
             <div class="input-group mb-4">
-              <input type="text" name="q" class="form-control bg-light text-dark rounded-start" placeholder="Pesquisar...">
+              <input type="text" class="form-control ps-5" id="name" name="name" value="{{ request.GET.name }}" placeholder="Buscar por nome">
               <button type="submit" class="btn btn-primary rounded-end">
                 <i class="bi bi-search"></i>
               </button>
             </div>
           </form>
 
-          <!-- Contato exemplo -->
+          {% for user in users %}
+        <div>
           <a href="" class="text-white text-decoration-none">
             <div class="d-flex align-items-center bg-primary bg-opacity-75 rounded p-2 mb-3">
               <img src="{% static 'images/default.png' %}" class="rounded-circle me-3" style="width: 50px; height: 45px;" alt="Avatar">
-              <span class="fw-semibold">Fellipe</span>
+              <span class="fw-semibold">{{ user.name }}</span>
             </div>
           </a>
         </div>
+
+        {% endfor %}
+
+      </div>
 
         <!-- Área de chat -->
         <div class="col-md-9 d-flex flex-column justify-content-between p-0" style="height: 92vh;">
