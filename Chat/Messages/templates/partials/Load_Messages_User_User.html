@@ -17,7 +17,7 @@
         {% endif %}
         {% endfor %}
     </div>
-    <form id="message-form" method="POST" action="{% url 'Enviar_Mensagem' %}" class="bg-secondary bg-opacity-50">
+    <form id="message-form" method="POST" class="bg-secondary bg-opacity-50">
         {% csrf_token %}
         <input type="hidden" name="id_receiver" id="id_receiver" value="{{ request.GET.id_receiver }}">
         <div class="d-flex align-items-center p-3">
@@ -28,38 +28,62 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const container  = document.getElementById('message-container');
-      const receiverId = document.getElementById('id_receiver').value;
-      const userId     = document.getElementById('user_id').value;
 
-      function carregarMensagens() {
-        fetch(`/Atualizar_Messages/${receiverId}/`)
-          .then(resp => resp.json())
-          .then(data => {
-            container.innerHTML = '';
-            data.messages.forEach(msg => {
-              const isSender = String(msg.id_sender) === String(userId);
-              const wrap = document.createElement('div');
-              wrap.className = `d-flex ${isSender
-                ? 'justify-content-end'
-                : 'justify-content-start'} mb-2`;
+let roomName = "user1_user2";
+let url = `ws://${window.location.host}/ws/socket-server/${roomName}/`;
+const chatsocket = new WebSocket(url);
 
-              wrap.innerHTML = `
-                <div class="${isSender
-                  ? 'bg-primary text-white'
-                  : 'bg-light text-dark'} p-2 rounded"
-                     style="max-width:60%; text-align:${isSender?'right':'left'};">
-                  ${msg.message}
-                </div>`;
-              container.appendChild(wrap);
-            });
-            container.scrollTop = container.scrollHeight;
-          })
-          .catch(console.error);
-      }
+chatsocket.onopen = function(event) {
+    console.log("WebSocket connection established!");
+};
 
-      carregarMensagens();
-      setInterval(carregarMensagens, 3000);
-    });
-  </script>
+chatsocket.onclose = function(event) {
+    console.log("WebSocket connection closed!");
+};
+
+chatsocket.onerror = function(error) {
+    console.error("WebSocket error:", error);
+};
+
+chatsocket.onmessage = function(e) {
+    let data = JSON.parse(e.data);
+    console.log("Received message from server:", data);
+    
+    const messageContainer = document.getElementById("message-container");
+    const messageElement = document.createElement("div");
+
+    if (data.sender === document.getElementById("user_id").value) {
+        messageElement.classList.add("d-flex", "justify-content-end", "mb-2");
+        messageElement.innerHTML = `<div class="bg-primary text-white p-2 rounded" style="max-width: 60%; text-align: right;">${data.message}</div>`;
+    } else {
+        messageElement.classList.add("d-flex", "justify-content-start", "mb-2");
+        messageElement.innerHTML = `<div class="bg-light text-dark p-2 rounded" style="max-width: 60%; text-align: left;">${data.message}</div>`;
+    }
+
+    messageContainer.appendChild(messageElement);
+    messageContainer.scrollTop = messageContainer.scrollHeight;
+};
+
+document.getElementById("message-form").onsubmit = function(event) {
+    event.preventDefault();
+
+    console.log('enviando msg')
+
+    const messageInput = document.getElementById("mensagem");
+    const receiverId = document.getElementById("id_receiver").value;
+    const senderId = document.getElementById("user_id").value;
+
+    const messageData = {
+        message: messageInput.value,
+        receiver_id: receiverId,
+        sender_id: senderId
+    };
+
+    chatsocket.send(JSON.stringify(messageData));
+
+    console.log('msg enviada')
+
+    messageInput.value = "";
+};
+
+</script>

@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    'django.contrib.staticfiles',    
 
     #Meus
     'Users',
@@ -46,6 +46,9 @@ INSTALLED_APPS = [
 
     #Terceiros
     'bootstrap5',
+    'channels',
+    'daphne',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -57,6 +60,14 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+ASGI_APPLICATION = 'Chat.asgi.application'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
 
 ROOT_URLCONF = 'Chat.urls'
 
