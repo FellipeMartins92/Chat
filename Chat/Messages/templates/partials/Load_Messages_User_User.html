@@ -29,7 +29,10 @@
 
 <script>
 
-let roomName = "user1_user2";
+const user_id = document.getElementById("user_id").value
+const receiver_id = document.getElementById("id_receiver").value
+const ids = [user_id, receiver_id].sort();
+const roomName = `room_${ids[0]}_${ids[1]}`;
 let url = `ws://${window.location.host}/ws/socket-server/${roomName}/`;
 const chatsocket = new WebSocket(url);
 
@@ -52,7 +55,7 @@ chatsocket.onmessage = function(e) {
     const messageContainer = document.getElementById("message-container");
     const messageElement = document.createElement("div");
 
-    if (data.sender === document.getElementById("user_id").value) {
+    if (data.sender === user_id) {
         messageElement.classList.add("d-flex", "justify-content-end", "mb-2");
         messageElement.innerHTML = `<div class="bg-primary text-white p-2 rounded" style="max-width: 60%; text-align: right;">${data.message}</div>`;
     } else {
@@ -70,13 +73,12 @@ document.getElementById("message-form").onsubmit = function(event) {
     console.log('enviando msg')
 
     const messageInput = document.getElementById("mensagem");
-    const receiverId = document.getElementById("id_receiver").value;
-    const senderId = document.getElementById("user_id").value;
+
 
     const messageData = {
         message: messageInput.value,
-        receiver_id: receiverId,
-        sender_id: senderId
+        receiver_id: receiver_id,
+        sender_id: user_id
     };
 
     chatsocket.send(JSON.stringify(messageData));
