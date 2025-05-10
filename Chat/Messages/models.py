@@ -13,6 +13,10 @@ class messages_to_user(models.Model):
     sent = models.DateTimeField(default=now)
     read = models.BooleanField(default=False)
 
+    def mensagens_nao_lidas_por_usuario(user_id):
+        return messages_to_user.objects.filter(id_receiver_id=user_id, read=False).count()
+
+
 class messages_to_group(models.Model):
     id_group = models.ManyToManyField(GroupChat)
     id_sender = models.ForeignKey(User, related_name='sent_messages_group', on_delete=models.CASCADE)

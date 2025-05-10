@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-from django.db.models import Q
+from django.db.models import Q, Count
 from Users.models import *
 from .models import *
 
@@ -21,17 +21,23 @@ def Messages(request):
 
     if id_receiver:
         messages = messages_to_user.objects.filter(
-            Q(id_sender=user_id,   id_receiver=id_receiver) |
+            Q(id_sender=user_id, id_receiver=id_receiver) |
             Q(id_sender=id_receiver, id_receiver=user_id)
         ).order_by('sent')
 
-    read_messages = messages_to_user.objects.filter(id_sender=id_receiver, id_receiver=user_id, read=False)
-    read_messages.update(read=True)
+    messages_to_user.objects.filter(id_sender=id_receiver, id_receiver=user_id, read=False).update(read=True)
+
+    unread_counts = messages_to_user.objects.filter(
+        id_receiver=user_id,
+        read=False
+    ).values('id_sender__id', 'id_sender__name') \
+     .annotate(total=Count('id'))
 
     return render(request, "Messages.html", {
         "users": users,
         "messages": messages,
         "id_receiver": id_receiver,
+        "unread_counts": unread_counts,
     })
 
 @custom_login_required
