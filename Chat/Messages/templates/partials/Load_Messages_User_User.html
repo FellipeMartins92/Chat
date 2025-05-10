@@ -43,7 +43,8 @@ const receiver_id = document.getElementById("id_receiver").value
 const ids = [user_id, receiver_id].sort();
 
 const roomName = `room_${ids[0]}_${ids[1]}`;
-let url = `ws://${window.location.host}/ws/socket-server/${roomName}/`;
+let url = `ws://${window.location.host}/ws/socket-server/${roomName}/?user_id=${user_id}`;
+
 const chatsocket = new WebSocket(url);
 
 chatsocket.onopen = function(event) {
@@ -64,7 +65,7 @@ chatsocket.onmessage = function(e) {
     const messageContainer = document.getElementById("message-container");
     const messageElement = document.createElement("div");
 
-    if (data.sender === user_id) {
+    if (data.sender_id === user_id) {
         const readStatus = data.read
             ? `<div class="text-success small d-flex align-items-center mt-1">
                     <i class="bi bi-check2-all me-1"></i>
