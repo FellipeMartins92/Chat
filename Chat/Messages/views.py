@@ -10,10 +10,14 @@ from .models import *
 
 @custom_login_required
 def Messages(request):
-    users       = User.objects.all()
+    users = User.objects.all()
+
+    if request.method == 'GET' and request.GET.get('name', ''):
+        users = users.filter(name__contains=request.GET.get('name', ''))
+
     id_receiver = request.GET.get('id_receiver')
-    user_id     = request.session.get('user_id')
-    messages    = []
+    user_id = request.session.get('user_id')
+    messages = []
 
     if id_receiver:
         messages = messages_to_user.objects.filter(
@@ -31,7 +35,6 @@ def Messages(request):
 def Atualizar_Messages(request, id_receiver):
     user_id = request.session.get('user_id')
 
-    # pega todas as mensagens entre os dois usuários
     messages = messages_to_user.objects.filter(
         Q(id_sender=user_id,   id_receiver=id_receiver) |
         Q(id_sender=id_receiver, id_receiver=user_id)
