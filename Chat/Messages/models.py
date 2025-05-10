@@ -11,9 +11,11 @@ class messages_to_user(models.Model):
     id_receiver = models.ForeignKey(User, related_name='received_messages', on_delete=models.CASCADE)
     message = models.CharField(max_length=255)
     sent = models.DateTimeField(default=now)
+    read = models.BooleanField(default=False)
 
 class messages_to_group(models.Model):
     id_group = models.ManyToManyField(GroupChat)
     id_sender = models.ForeignKey(User, related_name='sent_messages_group', on_delete=models.CASCADE)
     message = models.CharField(max_length=255)
     sent = models.DateTimeField(default=now)
+    read = models.BooleanField(default=False)

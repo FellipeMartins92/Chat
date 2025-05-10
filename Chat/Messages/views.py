@@ -25,6 +25,9 @@ def Messages(request):
             Q(id_sender=id_receiver, id_receiver=user_id)
         ).order_by('sent')
 
+    read_messages = messages_to_user.objects.filter(id_sender=id_receiver, id_receiver=user_id, read=False)
+    read_messages.update(read=True)
+
     return render(request, "Messages.html", {
         "users": users,
         "messages": messages,
@@ -44,6 +47,7 @@ def Atualizar_Messages(request, id_receiver):
         'message':    m.message,
         'id_sender':  m.id_sender.id,
         'id_receiver':m.id_receiver.id,
+        'read':       m.read
     } for m in messages]
 
     return JsonResponse({'messages': data})
